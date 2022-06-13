@@ -20,6 +20,39 @@ class CreatePage {
         return cy.get('button').eq(3);
     }
 
+    get addImageBtn() {
+        return cy.get('button').eq(-3);
+    }
+
+    get galleryInputParent() {
+        return cy.get('.form-group').eq(2);
+    }
+
+    get galleryInputButtonsParent() {
+        return this.galleryInputParent.get('.input-group-append').first();
+    }
+
+    //pokupiti sve parente dugmica
+    get allGalleryInputButtonParents() {
+        return this.galleryInputParent.get('.input-group-append')
+    }
+
+    get trashBtn() {
+        return this.galleryInputButtonsParent.get('.input-buttons').first();
+    }
+
+    get upBtn() {
+        return this.galleryInputButtonsParent.get('.input-buttons').eq(1);
+    }
+
+    get downBtn() {
+        return this.galleryInputButtonsParent.get('.input-buttons').eq(2);
+    }
+
+    get errorMesage() {
+        return cy.get('p[class="alert alert-danger"]')
+    }
+
     create(title, description, image) {
         this.titleInput.type(title);
         this.descriptionInput.type(description);

@@ -1,6 +1,7 @@
 /// <reference types="Cypress" />
 import {loginPage} from '../page_objects/loginPage'
 import {createPage} from '../page_objects/createPage'
+const faker = require('@faker-js/faker')
 
 describe('create POM', () => {
     
@@ -10,9 +11,11 @@ describe('create POM', () => {
     }
 
     const createCredentials = {
-        validName: 'Test galerija',
-        validDescription: 'Probni opis',
-        validImage: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Jungle.jpg'
+        validName: faker.random.word(),
+        validDescription: faker.random.word(),
+        validImage: faker.image.avatar(),
+        invalidImage: faker.image.nature(240, 150, true),
+        invalidName: ''
     }
     before('visit login page', () => {
         cy.visit('/')
@@ -34,5 +37,31 @@ describe('create POM', () => {
             createCredentials.validImage
         )
         cy.url().should('not.include', '/create');
+    })
+
+    it('wrong format image', () => {
+        createPage.create(
+            createCredentials.validName,
+            createCredentials.validDescription,
+            createCredentials.invalidImage
+        )
+        createPage.errorMesage.should('be.visible')
+        .and('have.text', 'Wrong format of image')
+    })
+
+    it('add additional image input field', () => {
+        createPage.addImageBtn.click();
+    })
+
+    //proveriti da li se moze pogoditi tacna lokacija up i down dugmica
+    it('move input fields', () => {
+        createPage.imageInput.type(createCredentials.validImage);
+        createPage.addImageBtn.click();
+        createPage.downBtn.click();
+    })
+
+    it.only('remove image input field', () => {
+        createPage.addImageBtn.click();
+        createPage.trashBtn.click();
     })
 })
