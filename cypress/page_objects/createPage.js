@@ -32,7 +32,6 @@ class CreatePage {
         return this.galleryInputParent.get('.input-group-append').first();
     }
 
-    //pokupiti sve parente dugmica
     get allGalleryInputButtonParents() {
         return this.galleryInputParent.get('.input-group-append')
     }

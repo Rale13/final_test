@@ -5,6 +5,7 @@ import {allGalleries} from '../page_objects/allGaleries'
 describe('create POM', () => {
 
     let filterText = "Test galerija"
+    let galleryId;
 
     beforeEach('visit login page', () => {
         cy.visit('/')
@@ -12,19 +13,36 @@ describe('create POM', () => {
     })
 
     it('check pagination', () => {
+        cy.intercept({
+            method: 'GET',
+            url: 'https://gallery-api.vivifyideas.com/api/galleries?page=2&term='
+        }).as('loadMore')
+
         allGalleries.loadMoreBtn;
         cy.get('.cell').should('have.length', 20);
+
+        cy.wait('@loadMore').then(interception => {
+            expect(interception.response.statusCode).eq(200);
+        })
     })
 
     it('find specific gallery by name and open it', () => {
+        cy.intercept({
+            method: 'GET',
+            url: 'https://gallery-api.vivifyideas.com/api/galleries/115'
+        }).as('specificGallery')
+        
+        
         allGalleries.findGallery(filterText);
         cy.get('.cell').should('have.length', 1);
         allGalleries.galleryTitle;
-    })
 
-    it('get all galleries title', () => {
-        cy.get(allGalleries.title);
-        allGalleries.title.should('have.text', 'All Galleries')
+        cy.wait('@specificGallery').then(interception => {
+            galleryId = interception.response.body.id;
+            expect(interception.response.body.title).eq(filterText);
+            cy.url().should('include', `/galleries/${galleryId}`)
+        })
+
     })
 
     it('open first gallery through title', () => {

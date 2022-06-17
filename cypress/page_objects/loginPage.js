@@ -8,7 +8,7 @@ class LoginPage {
         return cy.get('#email');
     }
     
-    get passwrodInput() {
+    get passwordInput() {
         return cy.get('#password')
     }
     
@@ -20,9 +20,17 @@ class LoginPage {
         return cy.get('.nav-link').eq(3);
     }
     
+    get loginHeading() {
+        return cy.get('h1')
+    }
+    
+    get errorMesage() {
+        return cy.get('p[class="alert alert-danger"]')
+    }
+    
     login(email, password) {
         this.emailInput.type(email);
-        this.passwrodInput.type(password);
+        this.passwordInput.type(password);
         this.submitBtn.click();
     }
     
