@@ -1,5 +1,4 @@
 /// <reference types="Cypress" />
-import {loginPage} from '../page_objects/loginPage'
 import {createPage} from '../page_objects/createPage'
 const faker = require('@faker-js/faker')
 
